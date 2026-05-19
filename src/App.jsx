@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import MathQuizGame from './MathQuizGame'
 import Multiplayer1v1 from './Multiplayer1v1'
+import LANClient from './LANClient'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
@@ -10,6 +11,7 @@ function App() {
   const [count, setCount] = useState(0)
   const [showQuiz, setShowQuiz] = useState(false)
   const [showMultiplayer, setShowMultiplayer] = useState(false)
+  const [showLAN, setShowLAN] = useState(false)
 
   return (
     <>
@@ -67,6 +69,13 @@ function App() {
               onClick={() => setShowMultiplayer(true)}
             >
               ⚔️ Mode 1V1
+            </button>
+            <button
+              type="button"
+              style={{marginTop: '0.5rem', padding: '10px 20px', background: '#9C27B0', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold'}}
+              onClick={() => setShowLAN(true)}
+            >
+              🌐 LAN 1V1
             </button>
           </section>
 
