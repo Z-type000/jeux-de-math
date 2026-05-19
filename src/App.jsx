@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import MathQuizGame from './MathQuizGame'
+import Multiplayer1v1 from './Multiplayer1v1'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
@@ -8,10 +9,21 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
   const [showQuiz, setShowQuiz] = useState(false)
+  const [showMultiplayer, setShowMultiplayer] = useState(false)
 
   return (
     <>
-      {showQuiz ? (
+      {showMultiplayer ? (
+        <section id="center">
+          <button 
+            onClick={() => setShowMultiplayer(false)}
+            style={{marginBottom: '1rem', padding: '8px 16px', background: '#333', color: '#fff', border: '1px solid #555', borderRadius: '4px', cursor: 'pointer', fontSize: '14px'}}
+          >
+            ← Retour
+          </button>
+          <Multiplayer1v1 />
+        </section>
+      ) : showQuiz ? (
         <section id="center">
           <button 
             onClick={() => setShowQuiz(false)}
@@ -48,6 +60,13 @@ function App() {
               onClick={() => setShowQuiz(true)}
             >
               🎓 Lancer le Quiz Math
+            </button>
+            <button
+              type="button"
+              style={{marginTop: '0.5rem', padding: '10px 20px', background: '#2196F3', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold'}}
+              onClick={() => setShowMultiplayer(true)}
+            >
+              ⚔️ Mode 1V1
             </button>
           </section>
 
