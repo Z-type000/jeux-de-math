@@ -28,7 +28,11 @@ const LANClient = () => {
   }, [socket]);
 
   const connectToServer = (role) => {
-    const s = io('http://localhost:3001');
+    // En développement: localhost:3001, En production: même origin
+    const serverUrl = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3001' 
+      : window.location.origin;
+    const s = io(serverUrl);
     setSocket(s);
 
     s.on('connect', () => {
