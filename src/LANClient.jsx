@@ -28,10 +28,15 @@ const LANClient = () => {
   }, [socket]);
 
   const connectToServer = (role) => {
-    // En développement: localhost:3001, En production: même origin
-    const serverUrl = window.location.hostname === 'localhost' 
-      ? 'http://localhost:3001' 
-      : window.location.origin;
+    // Déterminer l'URL du serveur
+    let serverUrl;
+    if (window.location.hostname === 'localhost') {
+      serverUrl = 'http://localhost:3001';
+    } else if (window.location.hostname === 'jeux-de-math.vercel.app') {
+      serverUrl = 'https://jeux-de-math-server.onrender.com';
+    } else {
+      serverUrl = window.location.origin;
+    }
     const s = io(serverUrl);
     setSocket(s);
 
