@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import MathQuizGame from './MathQuizGame'
-import Multiplayer1v1 from './Multiplayer1v1'
 import LANClient from './LANClient'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
@@ -10,20 +9,19 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
   const [showQuiz, setShowQuiz] = useState(false)
-  const [showMultiplayer, setShowMultiplayer] = useState(false)
   const [showLAN, setShowLAN] = useState(false)
 
   return (
     <>
-      {showMultiplayer ? (
+      {showLAN ? (
         <section id="center">
           <button 
-            onClick={() => setShowMultiplayer(false)}
+            onClick={() => setShowLAN(false)}
             style={{marginBottom: '1rem', padding: '8px 16px', background: '#333', color: '#fff', border: '1px solid #555', borderRadius: '4px', cursor: 'pointer', fontSize: '14px'}}
           >
             ← Retour
           </button>
-          <Multiplayer1v1 />
+          <LANClient />
         </section>
       ) : showQuiz ? (
         <section id="center">
@@ -65,17 +63,10 @@ function App() {
             </button>
             <button
               type="button"
-              style={{marginTop: '0.5rem', padding: '10px 20px', background: '#2196F3', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold'}}
-              onClick={() => setShowMultiplayer(true)}
-            >
-              ⚔️ Mode 1V1
-            </button>
-            <button
-              type="button"
               style={{marginTop: '0.5rem', padding: '10px 20px', background: '#9C27B0', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold'}}
               onClick={() => setShowLAN(true)}
             >
-              🌐 LAN 1V1
+              🌐 LAN (1V1)
             </button>
           </section>
 
