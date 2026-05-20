@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: jeux-de-math-server
+    runtime: node
+    plan: free
+    startCommand: npm run build && node server.cjs
+    envVars:
+      - key: NODE_ENV
+        value: production
