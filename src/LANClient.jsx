@@ -16,14 +16,15 @@ const LANClient = () => {
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   const quizData = [
-    { id: 1, question: 'Une suite arithmétique a u₀ = 5 et raison r = 2. Calculer u₁, u₂, u₃.', answer: 'u₁ = 7 ; u₂ = 9 ; u₃ = 11' },
-    { id: 2, question: 'Une suite géométrique a v₀ = 100 et raison q = 2. Calculer v₁, v₂, v₃.', answer: 'v₁ = 200 ; v₂ = 400 ; v₃ = 800' },
-    { id: 3, question: 'Calculer 2¹, 2², 2³, 2⁴.', answer: '2 ; 4 ; 8 ; 16' },
-    { id: 4, question: 'Quelle est la probabilité d\'obtenir un 6 sur un dé ?', answer: '1/6' },
-    { id: 5, question: 'Que vaut log(1000) ?', answer: '3' },
+    { id: 1, question: 'Une suite arithmétique a u₀ = 5 et raison r = 2. Calculer u₁, u₂, u₃.', answer: 'u₁ = 7 ; u₂ = 9 ; u₃ = 11', hints: ['Suite arithmétique : on ajoute la raison à chaque fois', 'u₁ = u₀ + r', 'Continuer pareil pour u₂ et u₃'] },
+    { id: 2, question: 'Une suite géométrique a v₀ = 100 et raison q = 2. Calculer v₁, v₂, v₃.', answer: 'v₁ = 200 ; v₂ = 400 ; v₃ = 800', hints: ['Suite géométrique : on multiplie par la raison', 'v₁ = v₀ × q', 'Refaire pareil pour v₂ et v₃'] },
+    { id: 3, question: 'Calculer 2¹, 2², 2³, 2⁴.', answer: '2 ; 4 ; 8 ; 16', hints: ['2ⁿ = 2 multiplié par lui-même n fois', '2² = 2 × 2', '2³ = 2 × 2 × 2'] },
+    { id: 4, question: 'Quelle est la probabilité d\'obtenir un 6 sur un dé ?', answer: '1/6', hints: ['1 face favorable', '6 faces possibles', 'Probabilité = favorables / total'] },
+    { id: 5, question: 'Que vaut log(1000) ?', answer: '3', hints: ['log compte le nombre de zéros', '1000 = 10³', 'log(10ⁿ) = n'] },
   ];
 
   const [playerRole, setPlayerRole] = useState(null);
+  const [showHint, setShowHint] = useState(0);
 
   useEffect(() => {
     return () => { if (socket) socket.close(); };
@@ -82,6 +83,7 @@ const LANClient = () => {
       setAnswered(false);
       setCorrectAnswer('');
       setQuestionNum(data.questionNumber);
+      setShowHint(0);
     });
 
     s.on('answers_revealed', (data) => {
@@ -248,6 +250,19 @@ const LANClient = () => {
             disabled={answered}
             style={{width: '100%', padding: '10px', marginBottom: '1rem', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px', opacity: answered ? 0.5 : 1, boxSizing: 'border-box'}}
           />
+          {!answered && question.hints && showHint < question.hints.length && (
+            <button
+              onClick={() => setShowHint(showHint + 1)}
+              style={{width: '100%', padding: '10px', marginBottom: '1rem', background: '#FFF9C4', color: '#F57F17', border: '1px solid #FFE082', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px'}}
+            >
+              💡 Indice ({showHint}/{question.hints.length})
+            </button>
+          )}
+          {showHint > 0 && question.hints && (
+            <div style={{background: '#FFF9C4', border: '1px solid #FFE082', padding: '12px', borderRadius: '4px', marginBottom: '1rem', fontSize: '13px', color: '#F57F17', lineHeight: 1.5}}>
+              {question.hints[showHint - 1]}
+            </div>
+          )}
           <button
             onClick={submitAnswer}
             disabled={answered || !answer.trim()}
