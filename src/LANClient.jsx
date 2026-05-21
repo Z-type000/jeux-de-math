@@ -16,11 +16,11 @@ const LANClient = () => {
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   const quizData = [
-    { id: 1, question: 'Une suite arithmétique a u₀ = 5 et raison r = 2. Calculer u₁, u₂, u₃.', answer: 'u₁ = 7 ; u₂ = 9 ; u₃ = 11', hints: ['Suite arithmétique : on ajoute la raison à chaque fois', 'u₁ = u₀ + r', 'Continuer pareil pour u₂ et u₃'] },
-    { id: 2, question: 'Une suite géométrique a v₀ = 100 et raison q = 2. Calculer v₁, v₂, v₃.', answer: 'v₁ = 200 ; v₂ = 400 ; v₃ = 800', hints: ['Suite géométrique : on multiplie par la raison', 'v₁ = v₀ × q', 'Refaire pareil pour v₂ et v₃'] },
-    { id: 3, question: 'Calculer 2¹, 2², 2³, 2⁴.', answer: '2 ; 4 ; 8 ; 16', hints: ['2ⁿ = 2 multiplié par lui-même n fois', '2² = 2 × 2', '2³ = 2 × 2 × 2'] },
-    { id: 4, question: 'Quelle est la probabilité d\'obtenir un 6 sur un dé ?', answer: '1/6', hints: ['1 face favorable', '6 faces possibles', 'Probabilité = favorables / total'] },
-    { id: 5, question: 'Que vaut log(1000) ?', answer: '3', hints: ['log compte le nombre de zéros', '1000 = 10³', 'log(10ⁿ) = n'] },
+    { id: 1, chapter: 'Suites', question: 'Une suite arithmétique a u₀ = 5 et raison r = 2. Calculer u₁, u₂, u₃.', answer: 'u₁ = 7 ; u₂ = 9 ; u₃ = 11', hints: ['Suite arithmétique : on ajoute la raison à chaque fois', 'u₁ = u₀ + r', 'Continuer pareil pour u₂ et u₃'] },
+    { id: 2, chapter: 'Suites', question: 'Une suite géométrique a v₀ = 100 et raison q = 2. Calculer v₁, v₂, v₃.', answer: 'v₁ = 200 ; v₂ = 400 ; v₃ = 800', hints: ['Suite géométrique : on multiplie par la raison', 'v₁ = v₀ × q', 'Refaire pareil pour v₂ et v₃'] },
+    { id: 3, chapter: 'Suites', question: 'Marie reçoit 50 € pour son anniversaire, puis 10 € de plus chaque mois. Combien aura-t-elle au bout de 4 mois ?', answer: '90 €', hints: ['On ajoute toujours 10 € → suite arithmétique', 'Départ = 50 €, raison = 10', 'Au bout de 4 mois : u₄ = 50 + 4 × 10'] },
+    { id: 4, chapter: 'Suites', question: "Le prix d'un produit augmente de 10 % par an. Il vaut 200 € aujourd'hui. Combien vaudra-t-il dans 1 an, puis dans 2 ans ?", answer: '220 € dans 1 an ; 242 € dans 2 ans', hints: ['Augmenter de 10 % = multiplier par 1,10', 'Suite géométrique avec q = 1,10', 'Au bout de 2 ans : multiplier deux fois'] },
+    { id: 5, chapter: 'Suites', question: 'Quelle est la nature de la suite : 3 ; 6 ; 9 ; 12 ; 15 ? Donner sa raison.', answer: 'Arithmétique, raison r = 3', hints: ['Regarder ce qu\'on fait pour passer d\'un terme à l\'autre', '6 − 3 = ? et 9 − 6 = ?', 'Si la différence est constante → arithmétique'] },
   ];
 
   const [playerRole, setPlayerRole] = useState(null);
