@@ -23,11 +23,13 @@ const LANClient = () => {
     { id: 5, question: 'Que vaut log(1000) ?', answer: '3' },
   ];
 
+  const [playerRole, setPlayerRole] = useState(null);
+
   useEffect(() => {
     return () => { if (socket) socket.close(); };
   }, [socket]);
 
-  const connectToServer = (role) => {
+  const connectToServer = (role, hostName, joinRoomCode = null) => {
     // Déterminer l'URL du serveur
     let serverUrl;
     const apiUrl = import.meta.env.VITE_SERVER_URL || window.location.origin;
@@ -38,7 +40,7 @@ const LANClient = () => {
       serverUrl = apiUrl;
     }
     
-    console.log('Connecting to server:', serverUrl);
+    console.log('🔌 Connecting to server:', serverUrl, 'as', role);
     const s = io(serverUrl, {
       reconnection: true,
       reconnectionDelay: 1000,
@@ -48,18 +50,24 @@ const LANClient = () => {
     setSocket(s);
 
     s.on('connect', () => {
-      console.log('Connected');
+      console.log('✅ Connected! Socket ID:', s.id);
       if (role === 'host') {
-        s.emit('create_room', { player1Name: playerName });
+        console.log('🏠 Emitting create_room for host:', hostName);
+        s.emit('create_room', { player1Name: hostName });
+      } else if (role === 'player') {
+        console.log('👤 Emitting join_room for player:', hostName, 'to room:', joinRoomCode);
+        s.emit('join_room', { roomId: joinRoomCode.toUpperCase(), player2Name: hostName });
       }
     });
 
     s.on('room_created', ({ roomId }) => {
+      console.log('✅ Room created:', roomId);
       setRoomCode(roomId);
       setStep('host-wait');
     });
 
     s.on('game_started', (data) => {
+      console.log('🎮 Game started! Opponent:', data.player2Name);
       setStep('playing');
       setQuestion(data.question);
       setOpponentName(data.player2Name);
@@ -68,6 +76,7 @@ const LANClient = () => {
     });
 
     s.on('new_question', (data) => {
+      console.log('📋 New question:', data.questionNumber);
       setQuestion(data.question);
       setAnswer('');
       setAnswered(false);
@@ -76,12 +85,14 @@ const LANClient = () => {
     });
 
     s.on('answers_revealed', (data) => {
+      console.log('✅ Answers revealed');
       setCorrectAnswer(data.correctAnswer);
       setScores({ p1: data.player1Score, p2: data.player2Score });
       setTimeout(() => setStep('results'), 500);
     });
 
     s.on('game_ended', (data) => {
+      console.log('🏁 Game ended! Final scores:', data.player1Score, 'vs', data.player2Score);
       setScores({ p1: data.player1Score, p2: data.player2Score });
       setTimeout(() => {
         alert('Partie terminée !');
@@ -89,30 +100,40 @@ const LANClient = () => {
       }, 2000);
     });
 
-    s.on('error', (msg) => { alert('Erreur: ' + msg); });
+    s.on('error', (msg) => { 
+      console.error('❌ Socket error:', msg);
+      alert('Erreur: ' + msg); 
+    });
+
+    s.on('opponent_disconnected', () => {
+      console.warn('⚠️ Opponent disconnected');
+      alert('Votre adversaire s\'est déconnecté');
+      setStep('role');
+    });
   };
 
   const handleHostStart = () => {
     if (!playerName.trim()) { alert('Entre ton nom !'); return; }
-    connectToServer('host');
+    console.log('🏠 Host starting with name:', playerName);
+    connectToServer('host', playerName);
   };
 
   const handlePlayerJoin = () => {
     if (!playerName.trim()) { alert('Entre ton nom !'); return; }
     if (!roomCode.trim()) { alert('Entre le code de salle !'); return; }
-    connectToServer('player');
-    setTimeout(() => {
-      if (socket) socket.emit('join_room', { roomId: roomCode.toUpperCase(), player2Name: playerName });
-    }, 500);
+    console.log('👤 Player joining with name:', playerName, 'to room:', roomCode);
+    connectToServer('player', playerName, roomCode);
   };
 
   const submitAnswer = () => {
     if (!answer.trim()) return;
+    console.log('📤 Submitting answer:', answer);
     setAnswered(true);
     socket.emit('submit_answer', { roomId: roomCode, answer });
   };
 
   const nextQuestion = () => {
+    console.log('⏭️ Next question');
     socket.emit('next_question', { roomId: roomCode });
     setStep('playing');
   };
