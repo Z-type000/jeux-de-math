@@ -30,14 +30,21 @@ const LANClient = () => {
   const connectToServer = (role) => {
     // Déterminer l'URL du serveur
     let serverUrl;
-    if (window.location.hostname === 'localhost') {
+    const apiUrl = import.meta.env.VITE_SERVER_URL || window.location.origin;
+    
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
       serverUrl = 'http://localhost:3001';
-    } else if (window.location.hostname === 'jeux-de-math.vercel.app') {
-      serverUrl = 'https://jeux-de-math-server.onrender.com';
     } else {
-      serverUrl = window.location.origin;
+      serverUrl = apiUrl;
     }
-    const s = io(serverUrl);
+    
+    console.log('Connecting to server:', serverUrl);
+    const s = io(serverUrl, {
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 5
+    });
     setSocket(s);
 
     s.on('connect', () => {

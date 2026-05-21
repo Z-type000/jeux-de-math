@@ -109,4 +109,9 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => console.log('Server listening on', PORT));
+server.listen(PORT, () => {
+  const env = process.env.NODE_ENV || 'development';
+  console.log(`🚀 Server running in ${env} mode`);
+  console.log(`📡 WebSocket server listening on http://localhost:${PORT}`);
+  console.log(`🎓 Connect from http://localhost:5173 or https://jeux-de-math.onrender.com`);
+});
